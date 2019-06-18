@@ -48,7 +48,7 @@
                                     size="sm"
                                     class="bg-red text-white q-pl-sm q-pr-sm"
                                     icon="ion-trash"
-                                    @click="del(props.row.NIS)"
+                                    @click="delet(props.row._id)"
                             >&nbsp;delete</q-btn>
                             <q-btn
                                     dense
@@ -97,6 +97,36 @@ export default {
     }
   },
   methods: {
+    delet (_id) {
+      this.$q.dialog({
+        title: 'Confirm',
+        message: 'Yakin mau dihapus?',
+        cancel: true,
+        persistent: true
+      }).onOk(() => {
+        this.$q.loading.show()
+        this.$store.dispatch({
+          type: 'petani/delet',
+          _id: _id
+        })
+          .then((response) => {
+            this.$q.loading.hide()
+            if (response.status) {
+              this.$q.notify({
+                message: 'Berhasil dihapus',
+                color: 'positive',
+                icon: 'checkmark'
+              })
+            } else {
+              this.$q.notify({
+                message: 'Gagal hapus',
+                color: 'negative',
+                icon: 'close'
+              })
+            }
+          })
+      })
+    },
     loadData () {
       this.loading = true
       this.$axios.get('petani').then(({ data }) => {

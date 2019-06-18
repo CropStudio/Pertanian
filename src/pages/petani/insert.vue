@@ -1,13 +1,10 @@
 <template>
     <q-page padding>
-        <p v-if="!id">Ini Tambah</p>
-        <p v-else>Ini Edit Data : {{id}}</p>
         <q-form
                 @submit="onSubmit"
                 @reset="onReset"
                 class="q-gutter-md"
         >
-            <q-input standout="bg-teal text-white" v-model="text" label="Custom standout" :dense="dense" />
             <q-input
                     filled
                     v-model="data.ktp"
@@ -71,8 +68,6 @@
                     hint="Nama Kelompok Tani"
             />
 
-            <q-toggle v-model="accept" label="I accept the license and terms" />
-
             <div>
                 <q-btn label="Submit" type="submit" color="primary"/>
                 <q-btn label="Reset" type="reset" color="primary" flat class="q-ml-sm" />
@@ -86,6 +81,78 @@ export default {
     return {
       data: {},
       id: this.$route.params.id
+    }
+  },
+  methods: {
+    onSubmit () {
+      if (this.$route.params.id) {
+        // ini fungsi simpan edit
+        this.$q.loading.show()
+        this.$store.dispatch({
+          type: 'petani/editsimpan',
+          _id: this.data._id,
+          ktp: this.data.ktp,
+          nama: this.data.nama,
+          tempat_lahir: this.data.tempat_lahir,
+          tanggal_lahir: this.data.tanggal_lahir,
+          jenis_kelamin: this.data.jenis_kelamin,
+          pendidikan: this.data.pendidikan,
+          status_keluarga: this.data.status_keluarga,
+          alamat: this.data.alamat,
+          no_hp: this.data.no_hp,
+          nama_kelompok_petani: this.data.nama_kelompok_petani
+        })
+          .then((response) => {
+            this.$q.loading.hide()
+            if (response.status) {
+              this.$q.notify({
+                message: 'Berhasil simpan',
+                color: 'positive',
+                icon: 'checkmark'
+              })
+            } else {
+              this.$q.notify({
+                message: 'Gagal simpan',
+                color: 'negative',
+                icon: 'close'
+              })
+            }
+          })
+      } else {
+        // ini fungsi simpan
+        this.$q.loading.show()
+        this.$store.dispatch({
+          type: 'petani/simpan',
+          ktp: this.data.ktp,
+          nama: this.data.nama,
+          tempat_lahir: this.data.tempat_lahir,
+          tanggal_lahir: this.data.tanggal_lahir,
+          jenis_kelamin: this.data.jenis_kelamin,
+          pendidikan: this.data.pendidikan,
+          status_keluarga: this.data.status_keluarga,
+          alamat: this.data.alamat,
+          no_hp: this.data.no_hp,
+          nama_kelompok_petani: this.data.nama_kelompok_petani
+        })
+          .then((response) => {
+            this.$q.loading.hide()
+            if (response.status) {
+              this.$q.notify({
+                message: 'Berhasil simpan',
+                color: 'positive',
+                icon: 'checkmark'
+              })
+            } else {
+              this.$q.notify({
+                message: 'Gagal simpan',
+                color: 'negative',
+                icon: 'close'
+              })
+            }
+          })
+      }
+    },
+    onReset () {
     }
   },
   mounted () {
