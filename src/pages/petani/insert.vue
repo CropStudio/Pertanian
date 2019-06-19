@@ -105,6 +105,7 @@ export default {
           .then((response) => {
             this.$q.loading.hide()
             if (response.status) {
+              this.loadData()
               this.$q.notify({
                 message: 'Berhasil simpan',
                 color: 'positive',
@@ -153,6 +154,18 @@ export default {
       }
     },
     onReset () {
+      this._id = null
+      this.ktp = null
+      this.nama = null
+      this.tempat_lahir = null
+      this.tanggal_lahir = null
+      this.jenis_kelamin = null
+      this.pendidikan = null
+      this.status_keluarga = null
+      this.alamat = null
+      this.no_hp = null
+      this.nama_kelompok_petani = null
+      this.accept = false
     }
   },
   mounted () {
